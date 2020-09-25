@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Registration',
+    'Direct_messages',
+    'Group_messages',
+    'Chatbot_messages',
 ]
 
 MIDDLEWARE = [

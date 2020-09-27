@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Registration',
+    'Home',
     'Direct_messages',
     'Group_messages',
     'Chatbot_messages',

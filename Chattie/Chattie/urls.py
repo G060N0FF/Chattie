@@ -18,9 +18,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/', include('django.config.auth')),
-    path('chat_bot/', include('Chatbot_messages.urls')),
-    path('direct_messages/', include('Direct_messages.urls')),
-    path('group_messages/', include('Group_messages.urls')),
+    # path('chat_bot/', include('Chatbot_messages.urls')),
+    # path('direct_messages/', include('Direct_messages.urls')),
+    # path('group_messages/', include('Group_messages.urls')),
     path('/', include('Home.urls')),
 ]

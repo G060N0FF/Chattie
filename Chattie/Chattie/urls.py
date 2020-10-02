@@ -20,6 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path('chat_bot/', include('Chatbot_messages.urls')),
     # path('direct_messages/', include('Direct_messages.urls')),
-    # path('group_messages/', include('Group_messages.urls')),
+    path('group_messages/', include('Group_messages.urls')),
     path('', include('Home.urls')),
 ]

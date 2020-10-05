@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from .forms import GroupNameForm
+from .forms import GroupCodeForm
 from django.contrib.auth.decorators import login_required
 
 
 @login_required
 def select_group(request):
-    form = GroupNameForm()
+    form = GroupCodeForm()
     groups = request.user.user_groups.all()
 
     if request.method == "POST":

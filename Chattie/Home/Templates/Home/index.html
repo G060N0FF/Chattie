@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chattie</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
     <a href="#">Direct messages</a>
     <br>
     <a href="/group_messages/">Group chat</a>
@@ -13,5 +9,5 @@
     <a href="#">Chat bot</a>
     <br>
     <a href="/accounts/logout?next=/">Logout</a>
-</body>
-</html>
+
+{% endblock %}

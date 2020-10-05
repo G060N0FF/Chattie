@@ -9,13 +9,21 @@
     <h1>Join group</h1>
     <form method="post" action="{% url 'select_group' %}">
         {% csrf_token %}
-        {{ form }}
+        {{ joinForm }}
         <button type="submit">Join group</button>
     </form>
+
+    <h1>Create group</h1>
+    <form method="post" action="{% url 'select_group' %}">
+        {% csrf_token %}
+        {{ creationForm }}
+        <button type="submit">Create group</button>
+    </form>
+
     <h1>My groups</h1>
     <ul>
         {% for group in groups %}
-            <li><a href="#">group.name</a></li>
+            <li><a href="#">{{ group.name }}</a><p>Join code: {{ group.code }}</p></li>
         {% endfor %}
     </ul>
 </body>

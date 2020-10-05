@@ -16,7 +16,8 @@ def select_group(request):
             try:
                 group = Group.objects.get(code=code)
             except:
-                return redirect('/group_messages')
+                context = {'error': "There is not a group that matches this password"}
+                return render(request, 'Group_messages/error.html', context)
             return redirect('/chat/'+str(group.pk))
                 
     context = {'form': form, 'groups': groups}
@@ -24,5 +25,5 @@ def select_group(request):
 
 
 @login_required
-def chat(request):
-    print(1)
+def chat(request, id):
+    print(id)

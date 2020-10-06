@@ -19,7 +19,7 @@
     <h1>My groups</h1>
     <ul>
         {% for group in groups %}
-            <li><a href="#">{{ group.name }}</a><p>Join code: {{ group.code }}</p></li>
+            <li><a href="{% url 'chat' group.pk %}">{{ group.name }}</a><p>Join code: {{ group.code }}</p></li>
         {% endfor %}
     </ul>
 

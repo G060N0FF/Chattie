@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.select_group, name='select_group'),
-    path('chat/<path:group_id>', views.chat, name='chat'),
+    path('chat/<path:id>', views.chat, name='chat'),
 ]

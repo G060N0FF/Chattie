@@ -29,6 +29,12 @@ def select_group(request):
                 except:
                     context = {'error': "There is not a group that matches this password"}
                     return render(request, 'Group_messages/error.html', context)
+                if request.user not in group.users.all():
+                    group.users.add(request.user)
+                    group.save()
+                else:
+                    context = {'error': "You are already a member of this group"}
+                    return render(request, 'Group_messages/error.html', context)
                 return redirect('/chat/'+str(group.pk))
         elif 'name' in request.POST:
             form = GroupCreationForm(request.POST)
@@ -53,4 +59,11 @@ def select_group(request):
 
 @login_required
 def chat(request, id):
-    print(id)
+    group = Group.objects.get(pk=id)
+    
+    if request.user not in group.users.all():
+        context = {'error': "You are not a member of this group"} 
+        return render(request, 'Group_messages/error.html', context)
+        
+    context = {'group': group}
+    return render(request, 'Group_messages/chat.html', context)

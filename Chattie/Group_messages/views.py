@@ -67,3 +67,15 @@ def chat(request, id):
         
     context = {'group': group}
     return render(request, 'Group_messages/chat.html', context)
+    
+    
+@login_required
+def settings(request, id):
+    group = Group.objects.get(pk=id)
+    
+    if request.user not in group.users.all():
+        context = {'error': "You are not a member of this group"} 
+        return render(request, 'Group_messages/error.html', context)
+        
+    context = {'group': group}
+    return render(request, 'Group_messages/settings.html', context)

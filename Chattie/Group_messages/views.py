@@ -72,10 +72,19 @@ def chat(request, id):
 @login_required
 def settings(request, id):
     group = Group.objects.get(pk=id)
+    name_form = GroupCreationForm()
     
     if request.user not in group.users.all():
         context = {'error': "You are not a member of this group"} 
         return render(request, 'Group_messages/error.html', context)
         
-    context = {'group': group}
+    if request.method == "POST":
+        if "name" in request.POST:
+            name_form = GroupCreationForm(request.POST)
+            if name_form.is_valid():
+                group.name = request.POST['name']
+                group.save()
+                return redirect('/group_messages/chat/'+str(id))
+        
+    context = {'group': group, 'name_form': name_form}
     return render(request, 'Group_messages/settings.html', context)

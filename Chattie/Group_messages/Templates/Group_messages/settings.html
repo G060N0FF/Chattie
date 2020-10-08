@@ -3,5 +3,12 @@
 {% block content %}
 
     <h1>Settings for {{ group.name }}</h1>
+    
+    <h3>Change group name</h3>
+    <form method="post" action="{% url 'settings' group.pk %}">
+        {% csrf_token %}
+        {{ name_form }}
+        <button type="submit">Change name</button>
+    </form>
 
 {% endblock %}

@@ -52,7 +52,6 @@ def select_group(request):
                         print("Trying new code")
                 return redirect('/group_messages')
 
-
     context = {'joinForm': join_form, 'creationForm': creation_form, 'groups': groups}
     return render(request, 'Group_messages/select_group.html', context)
 
@@ -74,6 +73,8 @@ def settings(request, id):
     group = Group.objects.get(pk=id)
     name_form = GroupCreationForm()
     find_user_form = FindUserForm()
+    username = request.user.username
+    users = []
     
     if request.user not in group.users.all():
         context = {'error': "You are not a member of this group"} 
@@ -90,11 +91,22 @@ def settings(request, id):
             find_user_form = FindUserForm(request.POST)
             if find_user_form.is_valid():
                 users = User.objects.filter(username__icontains=request.POST['username'])
-                context = {'group': group, 'name_form': name_form, 'find_user_form': find_user_form, 'users': users}
+                context = {
+                    'group': group,
+                    'name_form': name_form,
+                    'find_user_form': find_user_form,
+                    'users': users,
+                    'username': username
+                }
                 return render(request, 'Group_messages/settings.html', context)
 
-    users = []
-    context = {'group': group, 'name_form': name_form, 'find_user_form': find_user_form, 'users': users}
+    context = {
+        'group': group,
+        'name_form': name_form,
+        'find_user_form': find_user_form,
+        'users': users,
+        'username': username
+    }
     return render(request, 'Group_messages/settings.html', context)
     
 
@@ -116,3 +128,23 @@ def add(request, group_id, user_id):
     group.users.add(user)
     group.save()
     return redirect('/group_messages/settings/' + str(group_id))
+
+
+@login_required
+def remove(request, group_id, user_id):
+    group = Group.objects.get(pk=group_id)
+    user = User.objects.get(pk=user_id)
+
+    if request.user not in group.users.all():
+        error = "You are not a member of the group you are trying to remove members from"
+        context = {'error': error}
+        return render(request, 'Group_messages/error.html', context)
+
+    if user not in group.users.all():
+        error = "This user is not a member of the group"
+        context = {'error': error}
+        return render(request, 'Group_messages/error.html', context)
+
+    group.users.remove(user)
+    group.save()
+    return redirect('/group_messages/')

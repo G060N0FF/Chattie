@@ -24,7 +24,13 @@
     
     <h3>Members</h3>
     {% for user in group.users.all %}
-        <p>{{ user.username }}</p>
+        {% if user.username == username %}
+            <p>{{ user.username }}</p>
+            <a href="{% url 'remove' group.pk user.pk %}">Leave group</a>
+        {% else %}
+            <p>{{ user.username }}</p>
+            <a href="{% url 'remove' group.pk user.pk %}">Remove from group</a>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

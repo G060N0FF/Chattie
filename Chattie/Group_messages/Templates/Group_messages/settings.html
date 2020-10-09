@@ -10,5 +10,21 @@
         {{ name_form }}
         <button type="submit">Change name</button>
     </form>
+    
+    <h3>Find users to add</h3>
+    <form method="post" action="{% url 'settings' group.pk %}">
+        {% csrf_token %}
+        {{ find_user_form }}
+        <button type="submit">Search</button>
+    </form>
+    {% for user in users %}
+        <p>{{ user.username }}</p>
+        <a href="{% url 'add' group.pk user.pk %}">Add</a>
+    {% endfor %}
+    
+    <h3>Members</h3>
+    {% for user in group.users.all %}
+        <p>{{ user.username }}</p>
+    {% endfor %}
 
 {% endblock %}

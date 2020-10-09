@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import GroupCodeForm, GroupCreationForm
+from .forms import GroupCodeForm, GroupCreationForm, FindUserForm
 from .models import Group
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 import random
 import string
@@ -52,7 +53,6 @@ def select_group(request):
                 return redirect('/group_messages')
 
 
-                
     context = {'joinForm': join_form, 'creationForm': creation_form, 'groups': groups}
     return render(request, 'Group_messages/select_group.html', context)
 
@@ -73,6 +73,7 @@ def chat(request, id):
 def settings(request, id):
     group = Group.objects.get(pk=id)
     name_form = GroupCreationForm()
+    find_user_form = FindUserForm()
     
     if request.user not in group.users.all():
         context = {'error': "You are not a member of this group"} 
@@ -85,6 +86,33 @@ def settings(request, id):
                 group.name = request.POST['name']
                 group.save()
                 return redirect('/group_messages/chat/'+str(id))
-        
-    context = {'group': group, 'name_form': name_form}
+        elif "username" in request.POST:
+            find_user_form = FindUserForm(request.POST)
+            if find_user_form.is_valid():
+                users = User.objects.filter(username__icontains=request.POST['username'])
+                context = {'group': group, 'name_form': name_form, 'find_user_form': find_user_form, 'users': users}
+                return render(request, 'Group_messages/settings.html', context)
+
+    users = []
+    context = {'group': group, 'name_form': name_form, 'find_user_form': find_user_form, 'users': users}
     return render(request, 'Group_messages/settings.html', context)
+    
+
+@login_required
+def add(request, group_id, user_id):
+    group = Group.objects.get(pk=group_id)
+    user = User.objects.get(pk=user_id)
+    
+    if request.user not in group.users.all():
+        error = "You are not a member of the group you are trying to add members to"
+        context = {'error': error}
+        return render(request, 'Group_messages/error.html', context)
+    
+    if user in group.users.all():
+        error = "This user is already a member of the group"
+        context = {'error': error}
+        return render(request, 'Group_messages/error.html', context)
+        
+    group.users.add(user)
+    group.save()
+    return redirect('/group_messages/settings/' + str(group_id))

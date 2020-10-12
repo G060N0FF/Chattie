@@ -59,12 +59,13 @@ def select_group(request):
 @login_required
 def chat(request, id):
     group = Group.objects.get(pk=id)
+    room_name = group.name
     
     if request.user not in group.users.all():
         context = {'error': "You are not a member of this group"} 
         return render(request, 'Group_messages/error.html', context)
         
-    context = {'group': group}
+    context = {'group': group, "room_name": room_name}
     return render(request, 'Group_messages/chat.html', context)
     
     
@@ -147,4 +148,7 @@ def remove(request, group_id, user_id):
 
     group.users.remove(user)
     group.save()
-    return redirect('/group_messages/')
+    if user == request.user:
+        return redirect('/group_messages/')
+    else:
+        return redirect('/group_messages/chat/'+str(group_id))

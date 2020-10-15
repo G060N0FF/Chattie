@@ -59,12 +59,12 @@ def select_group(request):
 @login_required
 def chat(request, id):
     group = Group.objects.get(pk=id)
-    
+    username = request.user.username
     if request.user not in group.users.all():
         context = {'error': "You are not a member of this group"} 
         return render(request, 'Group_messages/error.html', context)
-        
-    context = {'group': group, "room_name": id}
+
+    context = {'group': group, "room_name": id, 'username': username}
     return render(request, 'Group_messages/chat.html', context)
     
     

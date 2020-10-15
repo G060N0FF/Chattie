@@ -7,7 +7,7 @@
     <br>
     <br>
 
-    <div style="border: 1px solid black; max-width: 300px; width: 300px; height: 500px; max-height: 500px; overflow-wrap: break-word; margin: 2px;" id="chat-log"></div>
+    <div style="border: 1px solid black; max-width: 300px; width: 300px; height: 500px; max-height: 500px; overflow-wrap: break-word; overflow-y:scroll; margin: 2px;" id="chat-log"></div>
     <input id="chat-message-input" type="text" size="31">
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
@@ -32,6 +32,8 @@
             else {
                 document.querySelector('#chat-log').innerHTML += "<p style='color: blue'>" + s + "</p>";
             }
+            var obj = document.querySelector('#chat-log');
+            obj.scrollTop = obj.scrollHeight;
         };
 
         chatSocket.onclose = function(e) {

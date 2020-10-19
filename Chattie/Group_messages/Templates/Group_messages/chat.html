@@ -23,6 +23,21 @@
             + '/'
         );
 
+<!--        chatSocket.addEventListener('open', function (event) {-->
+<!--            $.ajax({-->
+<!--                url: '/group_messages/load_messages',-->
+<!--                data: {-->
+<!--                    'username': username-->
+<!--                },-->
+<!--                dataType: 'json',-->
+<!--                success: function (data) {-->
+<!--                    if (data.is_taken) {-->
+<!--                        alert("A user with this username already exists.");-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
             var s = data.username + ': ' + data.message;
@@ -53,7 +68,8 @@
             if ( message.length != 0 ){
                 chatSocket.send(JSON.stringify({
                     'message': message,
-                    'username': username
+                    'username': username,
+                    'roomName': roomName
                 }));
                 messageInputDom.value = '';
             }

@@ -9,6 +9,7 @@ class Group(models.Model):
 
 
 class GroupMessage(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
+    text = models.TextField()
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, related_name='messages')
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, null=True)
     date = models.DateTimeField(auto_now_add=True)

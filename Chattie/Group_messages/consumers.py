@@ -46,7 +46,7 @@ class ChatConsumer(WebsocketConsumer):
         room_id = event['room_id']
         user = User.objects.get(username=username)
         group = Group.objects.get(pk=room_id)
-        new_message = GroupMessage(group=group, user=user)
+        new_message = GroupMessage(text=message, group=group, user=user)
         new_message.save()
 
         self.send(text_data=json.dumps({

@@ -11,6 +11,9 @@
     <input id="chat-message-input" type="text" size="31">
     <input id="chat-message-submit" type="button" value="Send">
     {{ room_name|json_script:"room-name" }}
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
         const username = "{{ username }}";
@@ -23,20 +26,29 @@
             + '/'
         );
 
-<!--        chatSocket.addEventListener('open', function (event) {-->
-<!--            $.ajax({-->
-<!--                url: '/group_messages/load_messages',-->
-<!--                data: {-->
-<!--                    'username': username-->
-<!--                },-->
-<!--                dataType: 'json',-->
-<!--                success: function (data) {-->
-<!--                    if (data.is_taken) {-->
-<!--                        alert("A user with this username already exists.");-->
-<!--                    }-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
+        chatSocket.addEventListener('open', function (event) {
+            $.ajax({
+                url: '/group_messages/load_messages/',
+                data: {
+                    'roomName': roomName
+                },
+                dataType: 'json',
+                success: function (data) {
+                    data = data.messages;
+                    for(i=0; i<data.length; i++){
+                        var s =  data[i][0] + ': ' + data[i][1];
+                        if(data[i][0] == username){
+                            document.querySelector('#chat-log').innerHTML += "<p style='color: blue'>" + s + "</p>";
+                        }
+                        else{
+                            document.querySelector('#chat-log').innerHTML += "<p>" + s + "</p>";
+                        }
+                        var obj = document.querySelector('#chat-log');
+                        obj.scrollTop = obj.scrollHeight;
+                    }
+                }
+            });
+        });
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);

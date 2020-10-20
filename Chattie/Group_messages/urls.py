@@ -8,4 +8,5 @@ urlpatterns = [
     path('settings/<path:id>', views.settings, name='settings'),
     path('add/<path:group_id>/<path:user_id>', views.add, name='add'),
     path('remove/<path:group_id>/<path:user_id>', views.remove, name='remove'),
+    path('load_messages/', views.load_messages, name='load_messages')
 ]

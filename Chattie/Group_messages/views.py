@@ -3,6 +3,7 @@ from .forms import GroupCodeForm, GroupCreationForm, FindUserForm
 from .models import Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 import random
 import string
@@ -151,3 +152,16 @@ def remove(request, group_id, user_id):
         return redirect('/group_messages/')
     else:
         return redirect('/group_messages/chat/'+str(group_id))
+
+
+@login_required
+def load_messages(request):
+    room_id = request.GET.get("roomName")
+    group = Group.objects.get(pk=room_id)
+    messages = group.messages.all()
+    data = {}
+    all_messages = []
+    for message in messages:
+        all_messages.append([message.user.username, message.text])
+    data['messages'] = all_messages
+    return JsonResponse(data)

@@ -4,6 +4,7 @@ from .models import Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 import random
 import string
@@ -158,10 +159,13 @@ def remove(request, group_id, user_id):
 def load_messages(request):
     room_id = request.GET.get("roomName")
     group = Group.objects.get(pk=room_id)
-    messages = group.messages.all()
+    messages = group.messages.order_by('date')
+    messages_paged = Paginator(messages, 10)
+    current_page = int(request.GET.get("page"))
+    messages = messages_paged.page(messages_paged.num_pages - current_page)
     data = {}
     all_messages = []
-    for message in messages:
+    for message in messages[::-1]:
         all_messages.append([message.user.username, message.text])
     data['messages'] = all_messages
     return JsonResponse(data)

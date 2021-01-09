@@ -26,11 +26,14 @@
             + '/'
         );
 
-        chatSocket.addEventListener('open', function (event) {
+        let page = 0;
+
+        function preloadMessages(){
             $.ajax({
                 url: '/group_messages/load_messages/',
                 data: {
-                    'roomName': roomName
+                    'roomName': roomName,
+                    'page': page,
                 },
                 dataType: 'json',
                 success: function (data) {
@@ -38,16 +41,35 @@
                     for(i=0; i<data.length; i++){
                         var s =  data[i][0] + ': ' + data[i][1];
                         if(data[i][0] == username){
-                            document.querySelector('#chat-log').innerHTML += "<p style='color: blue'>" + s + "</p>";
+                            document.querySelector('#chat-log').innerHTML = "<p style='color: blue'>" + s + "</p>" + document.querySelector('#chat-log').innerHTML;
                         }
                         else{
-                            document.querySelector('#chat-log').innerHTML += "<p>" + s + "</p>";
+                            document.querySelector('#chat-log').innerHTML = "<p>" + s + "</p>" + document.querySelector('#chat-log').innerHTML;
                         }
                         var obj = document.querySelector('#chat-log');
                         obj.scrollTop = obj.scrollHeight;
                     }
+                    page += 1;
                 }
             });
+        }
+
+        const sleep = (milliseconds) => {
+          return new Promise(resolve => setTimeout(resolve, milliseconds))
+        }
+
+        chatSocket.addEventListener('open', function (event) {
+            preloadMessages();
+            sleep(500).then(() => {
+              preloadMessages();
+            })
+        });
+
+        $('#chat-log').scroll(function() {
+            var pos = $('#chat-log').scrollTop();
+            if (pos == 0) {
+                preloadMessages();
+            }
         });
 
         chatSocket.onmessage = function(e) {

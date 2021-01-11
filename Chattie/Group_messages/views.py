@@ -160,7 +160,7 @@ def load_messages(request):
     room_id = request.GET.get("roomName")
     group = Group.objects.get(pk=room_id)
     messages = group.messages.order_by('date')
-    messages_paged = Paginator(messages, 10)
+    messages_paged = Paginator(messages, 20)
     current_page = int(request.GET.get("page"))
     messages = messages_paged.page(messages_paged.num_pages - current_page)
     data = {}

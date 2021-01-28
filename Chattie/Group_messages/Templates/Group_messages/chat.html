@@ -54,10 +54,10 @@
             const data = JSON.parse(e.data);
             var s = data.username + ': ' + data.message;
             if ( data.username != username ){
-                document.querySelector('#chat-log').innerHTML += "<p>" + s + "</p>";
+                document.querySelector('#chat-log').innerHTML += displayMessage(s, [], []);
             }
             else {
-                document.querySelector('#chat-log').innerHTML += "<p style='color: blue'>" + s + "</p>";
+                document.querySelector('#chat-log').innerHTML += displayMessage(s, [], ['blue']);
             }
             var obj = document.querySelector('#chat-log');
             obj.scrollTop = obj.scrollHeight;

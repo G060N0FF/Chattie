@@ -12,18 +12,18 @@ function preloadMessages(){
                 var s =  data[i][0] + ': ' + data[i][1];
                 if(i == 0){
                     if(data[i][0] == username){
-                        displayMessage(s, ['scroll'], ['blue']);
+                        document.querySelector('#chat-log').innerHTML = displayMessage(s, ['scroll'], ['blue']) + document.querySelector('#chat-log').innerHTML;
                     }
                     else{
-                        displayMessage(s, ['scroll'], []);
+                        document.querySelector('#chat-log').innerHTML = displayMessage(s, ['scroll'], []) + document.querySelector('#chat-log').innerHTML;
                     }
                 }
                 else{
                     if(data[i][0] == username){
-                        displayMessage(s, [], ['blue']);
+                        document.querySelector('#chat-log').innerHTML = displayMessage(s, [], ['blue']) + document.querySelector('#chat-log').innerHTML;
                     }
                     else{
-                        displayMessage(s, [], []);
+                        document.querySelector('#chat-log').innerHTML = displayMessage(s, [], []) + document.querySelector('#chat-log').innerHTML;
                     }
                 }
                 if(page == 0 || page == 1){
@@ -53,5 +53,5 @@ function displayMessage(s, ids, color){
     if(color.length > 0){
         color_string = " style='color:" + color[0] + "' ";
     }
-    document.querySelector('#chat-log').innerHTML = "<p" + id_string + color_string + ">" + s + "</p>" + document.querySelector('#chat-log').innerHTML;
+    return "<p" + id_string + color_string + ">" + s + "</p>";
 }
